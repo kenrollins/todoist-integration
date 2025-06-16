@@ -1,0 +1,131 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Todoist REST API",
+    "version": "1.0.0",
+    "description": "Create, list, and update Todoist tasks"
+  },
+  "servers": [
+    { "url": "https://api.todoist.com/rest/v2" }
+  ],
+  "paths": {
+    "/tasks": {
+      "post": {
+        "operationId": "createTask",
+        "summary": "Create a new task",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TaskInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Task" }
+              }
+            }
+          }
+        },
+        "security": [ { "bearerAuth": [] } ]
+      },
+      "get": {
+        "operationId": "listTasks",
+        "summary": "List tasks (optional: filter by project_id)",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "schema": { "type": "integer" },
+            "description": "Only tasks in this project"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Task objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Task" }
+                }
+              }
+            }
+          }
+        },
+        "security": [ { "bearerAuth": [] } ]
+      }
+    },
+    "/tasks/{task_id}": {
+      "patch": {
+        "operationId": "updateTask",
+        "summary": "Modify a task (e.g. move project)",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TaskUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "Task updated" }
+        },
+        "security": [ { "bearerAuth": [] } ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API Token"
+      }
+    },
+    "schemas": {
+      "TaskInput": {
+        "type": "object",
+        "properties": {
+          "content":   { "type": "string" },
+          "project_id":{ "type": "integer" },
+          "due_string":{ "type": "string" }
+        },
+        "required": ["content"]
+      },
+      "TaskUpdate": {
+        "type": "object",
+        "properties": {
+          "content":    { "type": "string" },
+          "project_id": { "type": "integer" },
+          "due_string": { "type": "string" }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id":         { "type": "integer" },
+          "content":    { "type": "string" },
+          "project_id": { "type": "integer" },
+          "due": {
+            "type": "object",
+            "properties": { "string": { "type": "string" } }
+          }
+        }
+      }
+    }
+  }
+}
+
