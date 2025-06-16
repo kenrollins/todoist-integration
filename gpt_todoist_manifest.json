@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "name_for_human": "Todoist Assistant",
+  "name_for_model": "todoist_assistant",
+  "description_for_human": "Manage your Todoist tasks via chat or voice",
+  "description_for_model": "Enables creating, listing, and updating tasks using the Todoist API",
+  "auth": {
+    "type": "service_http",
+    "authorization_type": "bearer",
+    "headers": {
+      "Authorization": {
+        "type": "string",
+        "description": "Bearer <YOUR_TODOIST_API_TOKEN>"
+      }
+    }
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://gist.githubusercontent.com/<you>/todoist_openapi.json"
+  },
+  "logo_url": "https://yourdomain.com/your-logo.png",
+  "contact_email": "you@yourdomain.com",
+  "legal_info_url": "https://yourdomain.com/legal"
+}
+
